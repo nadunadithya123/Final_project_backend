@@ -12,6 +12,8 @@ app.use(morgan("dev"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/news", require("./routes/news"));
 app.use("/api/solution", require("./routes/solution"));
+app.use("/api/comment", require("./routes/comment"));
+
 
 function createConnection() {
   try {
@@ -33,3 +35,5 @@ app.listen(port, (err) => {
   console.log(`Server is running on port ${port}`);
   createConnection();
 });
+
+module.exports = app

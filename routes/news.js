@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const authentication = require("../common/authentication");
 const News = require("../model/News");
-const Comments = require("../model/Comments");
+const Comment = require("../model/Comment");
 
 router.post("/", authentication, async (req, res) => {
   const { title, body } = req.body;
@@ -30,10 +30,11 @@ router.post("/", authentication, async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const news = await News.find();
+    const news = await News.find().sort({createdAt:-1}).populate('comments').exec();
     res.send(200, news);
     return;
   } catch (error) {
+    console.log(error)
     res.send(500, "Server error in news");
     return;
   }
@@ -45,7 +46,7 @@ router.put("/:id/comment", authentication, async (req, res) => {
     const comment = req.body.comment;
     const userId = req.user;
 
-    const newComment = new Comments({
+    const newComment = new Comment({
       newsId: newsId,
       comment: comment,
       userId,
